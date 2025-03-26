@@ -145,12 +145,17 @@ const defaultCanonicalUrl = new URL(Astro.url.pathname + Astro.url.search, baseU
   ) : null
 }
 
-<meta
-  name="robots"
-  content={`${Astro.props.noindex ? "noindex" : "index"}, ${
-    Astro.props.nofollow ? "nofollow" : "follow"
-  }`}
-/>
+{
+  Astro.props.noindex || Astro.props.nofollow ? (
+    <meta
+      name="robots"
+      content={[
+        Astro.props.noindex ? "noindex" : null,
+        Astro.props.nofollow ? "nofollow" : null
+      ].filter(Boolean).join(", ")}
+    />
+  ) : null
+}
 
 {Astro.props.openGraph && <OpenGraphBasicTags {...Astro.props} />}
 {Astro.props.openGraph?.optional && <OpenGraphOptionalTags {...Astro.props} />}
